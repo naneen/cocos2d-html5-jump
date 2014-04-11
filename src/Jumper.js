@@ -11,6 +11,8 @@ var Jumper = cc.Sprite.extend({
         this.backAccX = 0.5;
         this.jumpV = 20;
         this.g = -1;
+        this.accRight = 1;
+        this.accLeft = -1;
         
         this.vx = 0;
         this.vy = 0;
@@ -57,21 +59,27 @@ var Jumper = cc.Sprite.extend({
     },
 
     updateXMovement: function() {
-        if ( this.ground ) {
-            if ( ( !this.moveLeft ) && ( !this.moveRight ) ) {
-                this.autoDeaccelerateX();
-            } else if ( this.moveRight ) {
-                this.accelerateX( 1 );
-            } else {
-                this.accelerateX( -1 );
-            }
-        }
+        
+        this.checkGround();
+
         this.x += this.vx;
         if ( this.x < 0 ) {
             this.x += screenWidth;
         }
         if ( this.x > screenWidth ) {
             this.x -= screenWidth;
+        }
+    },
+
+    checkGround: function(){
+        if ( this.ground ) {
+            if ( ( !this.moveLeft ) && ( !this.moveRight ) ) {
+                this.autoDeaccelerateX();
+            } else if ( this.moveRight ) {
+                this.accelerateX( this.accRight );
+            } else {
+                this.accelerateX( this.accLeft );
+            }
         }
     },
 
@@ -177,3 +185,7 @@ Jumper.KEYMAP[cc.KEY.left] = 'moveLeft';
 Jumper.KEYMAP[cc.KEY.right] = 'moveRight';
 Jumper.KEYMAP[cc.KEY.up] = 'jump';
         
+// Juumper.ACC = {
+//     aRight: 1,
+//     aLeft: -1
+// }
